@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Félicitations !</title>
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A, #111827);
+            color: #E5E7EB;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* CONTAINER */
+        .fin-container {
+            max-width: 600px;
+            width: 90%;
+            padding: 50px;
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,191,255,0.2);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* TROPHÉE */
+        .trophy {
+            font-size: 5em;
+            margin-bottom: 10px;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #FACC15; }
+            to   { text-shadow: 0 0 25px #FACC15, 0 0 40px #00BFFF; }
+        }
+
+        h1 {
+            color: #FACC15;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #E5E7EB;
+            font-size: 18px;
+        }
+
+        /* SCORE */
+        .score-final {
+            font-size: 2em;
+            margin: 20px 0;
+            color: #00BFFF;
+            font-weight: bold;
+        }
+
+        /* BOUTONS */
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* REJOUER */
+        .fin-btns a:nth-child(1) button {
+            background: #00BFFF;
+            color: #0A0A0A;
+        }
+
+        .fin-btns a:nth-child(1) button:hover {
+            background: #38D9FF;
+        }
+
+        /* REVOIR SCÈNES */
+        .nav-btn {
+            background: rgba(0,191,255,0.15);
+            color: #00BFFF;
+            border: 1px solid rgba(0,191,255,0.4);
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,191,255,0.3);
+        }
+
+        /* MENU PRINCIPAL */
+        .quit-btn {
+            background: rgba(255,46,99,0.2);
+            color: white;
+            border: 1px solid #FF2E63;
+        }
+
+        .quit-btn:hover {
+            background: rgba(255,46,99,0.5);
+        }
+
+        /* LAYOUT BUTTONS */
+        .fin-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 25px;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body class="fin-body">
+    <div class="fin-container">
+        <div class="trophy">🏆🏆🏆</div>
+        <h1>FÉLICITATIONS !</h1>
+        <p>Vous avez résolu toutes les enquêtes !</p>
+        <p>Vous êtes un véritable détective !</p>
+        <div class="score-final" th:text="'Score final : ' + ${player.totalScore}"></div>
+
+        <div class="fin-btns">
+            <!-- Rejouer -->
+            <a th:href="@{/rejouer}">
+                <button type="button">🔄 REJOUER</button>
+            </a>
+            <!-- Revoir les scènes -->
+            <a th:href="@{/voir-scene/1}">
+                <button type="button" class="nav-btn">👁 REVOIR LES SCÈNES</button>
+            </a>
+            <!-- Menu principal -->
+            <a th:href="@{/quitter}">
+                <button type="button" class="quit-btn">🏠 MENU PRINCIPAL</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

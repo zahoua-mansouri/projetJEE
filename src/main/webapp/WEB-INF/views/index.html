@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détective Criminel</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A, #111827);
+            color: #E5E7EB;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,191,255,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #00BFFF;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #E5E7EB;
+            margin: 15px 0 10px;
+        }
+
+        .subtitle {
+            margin-bottom: 30px;
+            color: #9CA3AF;
+        }
+
+        .section {
+            border-top: 1px solid #374151;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        /* INPUT */
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #0A0A0A;
+        }
+
+        /* BOUTONS */
+        button {
+            background: #00BFFF;
+            color: #0A0A0A;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #38D9FF;
+            transform: scale(1.03);
+        }
+
+        /* ERREUR */
+        .error {
+            color: #FF2E63;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕵️ DÉTECTIVE CRIMINEL</h1>
+        <div class="subtitle">Trouvez le coupable et devenez le meilleur enquêteur !</div>
+        
+        <form th:action="@{/creer-joueur}" method="post">
+            <h3>🔰 NOUVELLE PARTIE</h3>
+            <input type="text" name="username" placeholder="Nom du détective" required>
+            <br>
+            <button type="submit">🔍 COMMENCER L'ENQUÊTE</button>
+        </form>
+        
+        <div class="section">
+            <form th:action="@{/charger-joueur}" method="get">
+                <h3>💾 CHARGER UN JOUEUR</h3>
+                <input type="text" name="username" placeholder="Votre nom">
+                <br>
+                <button type="submit">📂 CHARGER</button>
+            </form>
+        </div>
+        
+        <div th:if="${erreur}" class="error" th:text="${erreur}"></div>
+    </div>
+</body>
+</html>

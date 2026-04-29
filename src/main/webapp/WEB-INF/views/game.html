@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'🔍 Enquête - Niveau ' + ${level}">Enquête</title>
+    <style>
+        /* =============================
+           BASE
+        ============================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body.game-body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A, #111827);
+            color: #E5E7EB;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1300px;
+            margin: auto;
+        }
+
+        /* =============================
+           HEADER
+        ============================= */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(17, 24, 39, 0.9);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .score { color: #FACC15; }
+        .level { color: #00BFFF; }
+
+        .header-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* =============================
+           BOUTONS NAV
+        ============================= */
+        button {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-btn {
+            background: rgba(0,191,255,0.15);
+            color: #00BFFF;
+            border: 1px solid #00BFFF;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,191,255,0.3);
+        }
+
+        .quit-btn {
+            background: rgba(255,255,255,0.05);
+            color: #E5E7EB;
+            border: 1px solid #374151;
+        }
+
+        .quit-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* =============================
+           SCENE
+        ============================= */
+        .crime-scene {
+            background: rgba(17, 24, 39, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .crime-scene h1 {
+            color: #00BFFF;
+            margin-bottom: 15px;
+        }
+
+        .crime-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 15px;
+            border: 2px solid #00BFFF;
+            margin: 15px 0;
+        }
+
+        .description {
+            font-size: 17px;
+            margin: 15px 0;
+            color: #D1D5DB;
+        }
+
+        .clues {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-left: 4px solid #00BFFF;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        /* =============================
+           SUSPECTS
+        ============================= */
+        .suspects-title {
+            text-align: center;
+            font-size: 26px;
+            margin: 30px 0 20px;
+            color: #FACC15;
+        }
+
+        .suspects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .suspect-card {
+            background: rgba(17, 24, 39, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            width: 250px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .suspect-card:hover {
+            transform: translateY(-5px);
+            border: 1px solid #00BFFF;
+        }
+
+        .suspect-image {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00BFFF;
+        }
+
+        .suspect-card h3 {
+            margin-top: 10px;
+        }
+
+        .suspect-card p {
+            font-size: 14px;
+            color: #9CA3AF;
+            margin: 10px 0;
+        }
+
+        .accuse-btn {
+            background: #00BFFF;
+            color: #0A0A0A;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .accuse-btn:hover {
+            background: #38D9FF;
+        }
+
+        /* =============================
+           POPUPS
+        ============================= */
+        .feedback-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .feedback-success,
+        .feedback-error {
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .feedback-success {
+            background: linear-gradient(135deg, #00BFFF, #1E40AF);
+        }
+
+        .feedback-error {
+            background: linear-gradient(135deg, #1F2937, #DC2626);
+        }
+
+        .feedback-success h3,
+        .feedback-error h3 {
+            margin-bottom: 10px;
+        }
+
+        .close-feedback,
+        .next-level-btn {
+            margin-top: 10px;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .close-feedback {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .next-level-btn {
+            background: #FACC15;
+            color: #0A0A0A;
+        }
+
+        .next-level-btn:hover {
+            background: #FFD84D;
+        }
+
+    </style>
+</head>
+
+<body class="game-body">
+    <div class="game-container">
+
+        <!-- En-tête -->
+        <div class="header">
+            <div>🕵️ Détective: <span th:text="${player.username}"></span></div>
+            <div class="score">⭐ Score: <span th:text="${player.totalScore}"></span></div>
+            <div class="level">📊 Niveau: <span th:text="${level}"></span>/3</div>
+            <div class="header-btns">
+                <!-- Revoir scène précédente -->
+                <a th:if="${level > 1}" th:href="@{/voir-scene/{n}(n=${level - 1})}">
+                    <button type="button" class="nav-btn">👁 Scène précédente</button>
+                </a>
+                <!-- Quitter -->
+                <a th:href="@{/quitter}">
+                    <button type="button" class="quit-btn">🚪 Quitter</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scène de crime -->
+        <div class="crime-scene">
+            <h1>🔍 SCÈNE DE CRIME</h1>
+            <img class="crime-image"
+                 th:src="@{'/assets/images/crimes/' + ${scene.imagePath}}"
+                 alt="Scene de crime"
+                 onerror="this.src='https://via.placeholder.com/600x350?text=SCENE+DE+CRIME'">
+            <div class="description" th:text="${scene.description}"></div>
+            <div class="clues">
+                <strong>🔎 INDICES :</strong><br>
+                <span th:text="${scene.clues}"></span>
+            </div>
+        </div>
+
+        <!-- Suspects -->
+        <div class="suspects-title">👥 SUSPECTS 👥</div>
+        <div class="suspects">
+            <div th:each="suspect : ${suspects}" class="suspect-card">
+                <img class="suspect-image"
+                     th:src="@{'/assets/images/suspects/' + ${suspect.imagePath}}"
+                     alt="Suspect"
+                     onerror="this.src='https://via.placeholder.com/180?text=Suspect'">
+                <h3 th:text="${suspect.name}"></h3>
+                <p th:text="${suspect.description}"></p>
+                <form th:action="@{/repondre}" method="post">
+                    <input type="hidden" name="suspectId"    th:value="${suspect.id}">
+                    <input type="hidden" name="crimeSceneId" th:value="${scene.id}">
+                    <input type="hidden" name="level"        th:value="${level}">
+                    <button type="submit" class="accuse-btn">🔍 ACCUSER</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Popup bonne réponse -->
+    <div th:if="${message}" class="feedback-panel">
+        <div class="feedback-success">
+            <h3>🎉 JUSTICIER ! 🎉</h3>
+            <p th:text="${message}"></p>
+            <div>
+                <button class="close-feedback"
+                        onclick="this.closest('.feedback-panel').style.display='none'">
+                    🔍 Continuer
+                </button>
+                <a th:if="${nextLevel}" th:href="@{/niveau/{n}(n=${nextLevel})}">
+                    <button type="button" class="next-level-btn">🚀 NIVEAU SUIVANT</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup mauvaise réponse -->
+    <div th:if="${erreur}" class="feedback-panel">
+        <div class="feedback-error">
+            <h3>😵 ERREUR JUDICIAIRE ! 😵</h3>
+            <p th:text="${erreur}"></p>
+            <button class="close-feedback"
+                    onclick="this.closest('.feedback-panel').style.display='none'">
+                🔍 Réessayer
+            </button>
+        </div>
+    </div>
+
+    <script th:src="@{/assets/js/game.js}"></script>
+</body>
+</html>

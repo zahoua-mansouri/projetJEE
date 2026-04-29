@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'👁 Scène ' + ${level} + ' - Lecture seule'">Scène</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A, #111827);
+            color: #E5E7EB;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            max-width: 1300px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(17, 24, 39, 0.9);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .score { color: #FACC15; }
+        .level { color: #00BFFF; }
+
+        /* BOUTONS */
+        button {
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn {
+            background: rgba(0,191,255,0.15);
+            color: #00BFFF;
+            border: 1px solid rgba(0,191,255,0.4);
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,191,255,0.3);
+        }
+
+        .back-btn {
+            background: rgba(0,255,150,0.15);
+            color: #00FFA0;
+            border: 1px solid rgba(0,255,150,0.4);
+        }
+
+        .back-btn:hover {
+            background: rgba(0,255,150,0.3);
+        }
+
+        /* BADGE */
+        .readonly-badge {
+            text-align: center;
+            background: rgba(250, 204, 21, 0.1);
+            border: 1px solid #FACC15;
+            color: #FACC15;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* CRIME SCENE */
+        .crime-scene {
+            background: rgba(17, 24, 39, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .crime-scene h1 {
+            color: #00BFFF;
+            margin-bottom: 15px;
+        }
+
+        .crime-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid #00BFFF;
+        }
+
+        .description {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+
+        .clues {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #FF2E63;
+            text-align: left;
+        }
+
+        /* SUSPECTS */
+        .suspects-title {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 28px;
+            color: #FACC15;
+        }
+
+        .suspects {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .suspect-card {
+            background: rgba(17, 24, 39, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .suspect-card:hover {
+            transform: translateY(-5px);
+            background: #1F2937;
+        }
+
+        .suspect-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00BFFF;
+        }
+
+        /* BADGE COUPABLE */
+        .guilty-badge {
+            background: #FF2E63;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* NAVIGATION SCENES */
+        .scene-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+    </style>
+</head>
+<body class="game-body">
+    <div class="game-container">
+
+        <!-- En-tête -->
+        <div class="header">
+            <div>🕵️ Détective: <span th:text="${player.username}"></span></div>
+            <div class="score">⭐ Score: <span th:text="${player.totalScore}"></span></div>
+            <div class="level">📊 Scène: <span th:text="${level}"></span>/3</div>
+            <div>
+                <a th:href="@{/niveau/{n}(n=${player.currentLevel})}">
+                    <button type="button" class="back-btn">▶ Reprendre ma partie</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Badge lecture seule -->
+        <div class="readonly-badge">👁 MODE LECTURE SEULE — Scène <span th:text="${level}"></span></div>
+
+        <!-- Scène de crime -->
+        <div class="crime-scene">
+            <h1>🔍 SCÈNE DE CRIME</h1>
+            <img class="crime-image"
+                 th:src="@{'/assets/images/crimes/' + ${scene.imagePath}}"
+                 alt="Scene de crime"
+                 onerror="this.src='https://via.placeholder.com/600x350?text=SCENE+DE+CRIME'">
+            <div class="description" th:text="${scene.description}"></div>
+            <div class="clues">
+                <strong>🔎 INDICES :</strong><br>
+                <span th:text="${scene.clues}"></span>
+            </div>
+        </div>
+
+        <!-- Suspects en lecture seule -->
+        <div class="suspects-title">👥 SUSPECTS 👥</div>
+        <div class="suspects">
+            <div th:each="suspect : ${suspects}" class="suspect-card">
+                <img class="suspect-image"
+                     th:src="@{'/assets/images/suspects/' + ${suspect.imagePath}}"
+                     alt="Suspect"
+                     onerror="this.src='https://via.placeholder.com/180?text=Suspect'">
+                <h3 th:text="${suspect.name}"></h3>
+                <p th:text="${suspect.description}"></p>
+                <!-- Pas de bouton accuser -->
+                <div th:if="${suspect.guilty}" class="guilty-badge">💀 COUPABLE</div>
+            </div>
+        </div>
+
+        <!-- Navigation entre scènes -->
+        <div class="scene-nav">
+            <a th:if="${level > 1}" th:href="@{/voir-scene/{n}(n=${level - 1})}">
+                <button type="button" class="nav-btn">⬅ Scène précédente</button>
+            </a>
+            <a th:href="@{/niveau/{n}(n=${player.currentLevel})}">
+                <button type="button" class="back-btn">▶ Reprendre ma partie</button>
+            </a>
+            <a th:if="${level < player.currentLevel - 1}" th:href="@{/voir-scene/{n}(n=${level + 1})}">
+                <button type="button" class="nav-btn">Scène suivante ➡</button>
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>

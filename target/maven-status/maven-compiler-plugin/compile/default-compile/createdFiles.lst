@@ -1,0 +1,8 @@
+com\detective\dao\GameDao$SuspectRowMapper.class
+com\detective\model\Player.class
+com\detective\model\Suspect.class
+com\detective\controller\GameController.class
+com\detective\dao\GameDao$CrimeSceneRowMapper.class
+com\detective\model\CrimeScene.class
+com\detective\dao\GameDao$PlayerRowMapper.class
+com\detective\dao\GameDao.class
