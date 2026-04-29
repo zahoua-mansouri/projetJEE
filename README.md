@@ -1,2 +1,2 @@
 # projetJEE
-projet de jEE
+Le jeu Détective Criminel est un jeu de réflexion solo qui a été créé avec Spring MVC et Thymeleaf. Dans le jeu Détective Criminel, le joueur joue le rôle d'un détective. Le détective a pour tâche de résoudre trois enquêtes criminelles. Pour résoudre ces enquêtes criminelles, le détective doit analyser les scènes de crime, lire les indices et identifier le coupable parmi quatre suspects. Le jeu Détective Criminel propose un système de score. Ce système de score est basé sur le nombre d'erreurs commises par le détective. Le jeu Détective Criminel propose également une sauvegarde de la progression du détective et une reprise de partie. La reprise de partie est possible grâce à une base de données MySQL.
