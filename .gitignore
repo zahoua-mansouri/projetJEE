@@ -1,0 +1,15 @@
+# Fichiers compilés
+*.class
+
+# Logs
+*.log
+
+# Dossier build
+/target/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
